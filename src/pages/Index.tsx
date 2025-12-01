@@ -4,112 +4,16 @@ import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import Icon from '@/components/ui/icon';
+import { countries, Country } from '@/data/countries';
+import Quiz from '@/components/Quiz';
+import WorldMap from '@/components/WorldMap';
 
-interface Country {
-  id: string;
-  name: string;
-  flag: string;
-  region: string;
-  capital: string;
-  population: string;
-  language: string;
-  currency: string;
-  landmarks: string[];
-  cuisine: string[];
-  culture: string[];
-  geography: string;
-}
-
-const countries: Country[] = [
-  {
-    id: 'japan',
-    name: 'Япония',
-    flag: '🇯🇵',
-    region: 'Восточная Азия',
-    capital: 'Токио',
-    population: '125 млн',
-    language: 'Японский',
-    currency: 'Иена',
-    landmarks: ['Гора Фуджи', 'Храм Сэнсо-дзи', 'Замок Химэдзи', 'Токийская башня'],
-    cuisine: ['Суши', 'Рамен', 'Темпура', 'Якитори', 'Онигири'],
-    culture: ['Чайная церемония', 'Икебана', 'Каллиграфия', 'Оригами', 'Кимоно'],
-    geography: 'Островное государство, состоящее из 4 крупных и тысяч малых островов. Горный рельеф, активная вулканическая деятельность.'
-  },
-  {
-    id: 'italy',
-    name: 'Италия',
-    flag: '🇮🇹',
-    region: 'Южная Европа',
-    capital: 'Рим',
-    population: '60 млн',
-    language: 'Итальянский',
-    currency: 'Евро',
-    landmarks: ['Колизей', 'Пизанская башня', 'Венецианские каналы', 'Ватикан'],
-    cuisine: ['Пицца', 'Паста', 'Ризотто', 'Джелато', 'Тирамису'],
-    culture: ['Опера', 'Мода', 'Архитектура Ренессанса', 'Карнавал', 'Виноделие'],
-    geography: 'Полуостров в форме сапога. Альпы на севере, Апеннины вдоль всей страны. Омывается тремя морями.'
-  },
-  {
-    id: 'brazil',
-    name: 'Бразилия',
-    flag: '🇧🇷',
-    region: 'Южная Америка',
-    capital: 'Бразилиа',
-    population: '215 млн',
-    language: 'Португальский',
-    currency: 'Реал',
-    landmarks: ['Статуя Христа-Искупителя', 'Водопады Игуасу', 'Амазонка', 'Копакабана'],
-    cuisine: ['Фейжоада', 'Шураско', 'Акарахе', 'Бригадейро', 'Кайпиринья'],
-    culture: ['Самба', 'Карнавал', 'Капоэйра', 'Футбол', 'Босса-нова'],
-    geography: 'Крупнейшая страна Южной Америки. Бассейн реки Амазонки, тропические леса, саванны и горные плато.'
-  },
-  {
-    id: 'egypt',
-    name: 'Египет',
-    flag: '🇪🇬',
-    region: 'Северная Африка',
-    capital: 'Каир',
-    population: '104 млн',
-    language: 'Арабский',
-    currency: 'Фунт',
-    landmarks: ['Пирамиды Гизы', 'Сфинкс', 'Луксор', 'Абу-Симбел'],
-    cuisine: ['Кошари', 'Фуль', 'Таамия', 'Молохия', 'Кунафа'],
-    culture: ['Древние иероглифы', 'Танец живота', 'Папирус', 'Кальян', 'Базары'],
-    geography: 'Пустынная страна с оазисами. Река Нил пересекает всю территорию. Красное и Средиземное моря.'
-  },
-  {
-    id: 'australia',
-    name: 'Австралия',
-    flag: '🇦🇺',
-    region: 'Океания',
-    capital: 'Канберра',
-    population: '26 млн',
-    language: 'Английский',
-    currency: 'Доллар',
-    landmarks: ['Сиднейский оперный театр', 'Большой Барьерный риф', 'Улуру', '12 апостолов'],
-    cuisine: ['Мясные пироги', 'Веджимайт', 'Ламингтон', 'Павлова', 'Барбекю'],
-    culture: ['Культура аборигенов', 'Сёрфинг', 'Крикет', 'Диджериду', 'Буш'],
-    geography: 'Континент-остров с разнообразными ландшафтами: пустыни, тропические леса, горы и побережья.'
-  },
-  {
-    id: 'india',
-    name: 'Индия',
-    flag: '🇮🇳',
-    region: 'Южная Азия',
-    capital: 'Нью-Дели',
-    population: '1.4 млрд',
-    language: 'Хинди, Английский',
-    currency: 'Рупия',
-    landmarks: ['Тадж-Махал', 'Красный форт', 'Ворота Индии', 'Джайпур'],
-    cuisine: ['Карри', 'Бирьяни', 'Тандури', 'Самоса', 'Наан'],
-    culture: ['Йога', 'Болливуд', 'Классические танцы', 'Дивали', 'Мехенди'],
-    geography: 'Разнообразный рельеф: Гималаи на севере, плато Декан в центре, прибрежные равнины.'
-  }
-];
+type ViewMode = 'explore' | 'quiz' | 'map';
 
 export default function Index() {
   const [selectedCountry, setSelectedCountry] = useState<Country | null>(null);
   const [activeSection, setActiveSection] = useState<string>('all');
+  const [viewMode, setViewMode] = useState<ViewMode>('explore');
 
   const handleCountryClick = (country: Country) => {
     setSelectedCountry(country);
@@ -123,6 +27,42 @@ export default function Index() {
     ? countries 
     : countries.filter(c => c.region.toLowerCase().includes(activeSection.toLowerCase()));
 
+  if (viewMode === 'quiz') {
+    return (
+      <div>
+        <div className="fixed top-4 left-4 z-50">
+          <Button
+            onClick={() => setViewMode('explore')}
+            variant="outline"
+            className="backdrop-blur-sm bg-card/90"
+          >
+            <Icon name="ArrowLeft" className="mr-2" size={18} />
+            Назад к странам
+          </Button>
+        </div>
+        <Quiz />
+      </div>
+    );
+  }
+
+  if (viewMode === 'map') {
+    return (
+      <div>
+        <div className="fixed top-4 left-4 z-50">
+          <Button
+            onClick={() => setViewMode('explore')}
+            variant="outline"
+            className="backdrop-blur-sm bg-card/90"
+          >
+            <Icon name="ArrowLeft" className="mr-2" size={18} />
+            Назад к странам
+          </Button>
+        </div>
+        <WorldMap />
+      </div>
+    );
+  }
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-vivid-purple/10 via-ocean-blue/10 to-bright-orange/10">
       <div className="container mx-auto px-4 py-8">
@@ -130,9 +70,39 @@ export default function Index() {
           <h1 className="text-6xl font-bold mb-4 bg-gradient-to-r from-vivid-purple via-ocean-blue to-bright-orange bg-clip-text text-transparent">
             🌍 Мир культур
           </h1>
-          <p className="text-xl text-muted-foreground">
+          <p className="text-xl text-muted-foreground mb-6">
             Исследуй культуры и географию стран мира
           </p>
+          
+          <div className="flex flex-wrap gap-3 justify-center">
+            <Button
+              onClick={() => setViewMode('explore')}
+              variant={viewMode === 'explore' ? 'default' : 'outline'}
+              size="lg"
+              className="hover:scale-105 transition-transform"
+            >
+              <Icon name="Book" className="mr-2" size={20} />
+              Исследовать страны
+            </Button>
+            <Button
+              onClick={() => setViewMode('map')}
+              variant={viewMode === 'map' ? 'default' : 'outline'}
+              size="lg"
+              className="hover:scale-105 transition-transform"
+            >
+              <Icon name="Map" className="mr-2" size={20} />
+              Карта мира
+            </Button>
+            <Button
+              onClick={() => setViewMode('quiz')}
+              variant={viewMode === 'quiz' ? 'default' : 'outline'}
+              size="lg"
+              className="hover:scale-105 transition-transform"
+            >
+              <Icon name="Brain" className="mr-2" size={20} />
+              Викторина
+            </Button>
+          </div>
         </header>
 
         <div className="mb-8 flex flex-wrap gap-3 justify-center animate-scale-in">
@@ -142,7 +112,7 @@ export default function Index() {
             className="rounded-full transition-all hover:scale-105"
           >
             <Icon name="Globe" className="mr-2" size={18} />
-            Все страны
+            Все страны ({countries.length})
           </Button>
           <Button
             onClick={() => setActiveSection('азия')}
@@ -181,13 +151,13 @@ export default function Index() {
           </Button>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 mb-8">
           {filteredCountries.map((country, index) => (
             <Card
               key={country.id}
               onClick={() => handleCountryClick(country)}
               className="p-6 cursor-pointer hover:shadow-2xl transition-all duration-300 hover:scale-105 hover:-translate-y-2 animate-fade-in group"
-              style={{ animationDelay: `${index * 0.1}s` }}
+              style={{ animationDelay: `${index * 0.05}s` }}
             >
               <div className="text-center">
                 <div className="text-7xl mb-4 group-hover:scale-110 transition-transform duration-300">
