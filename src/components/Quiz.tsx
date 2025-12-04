@@ -94,7 +94,15 @@ export default function Quiz() {
     
     switch (mode) {
       case 'flag':
-        return <div className="text-9xl mb-8 animate-scale-in">{currentQuestion.country.flag}</div>;
+        return (
+          <div className="mb-8 animate-scale-in flex justify-center">
+            <img 
+              src={currentQuestion.country.flagImage} 
+              alt={`Флаг ${currentQuestion.country.name}`}
+              className="w-full max-w-md rounded-lg shadow-2xl border-4 border-white"
+            />
+          </div>
+        );
       case 'landmark':
         return (
           <div className="flex items-center gap-3 mb-8 animate-fade-in">
